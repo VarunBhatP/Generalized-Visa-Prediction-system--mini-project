@@ -1,0 +1,38 @@
+# Environment variables
+.env
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environment
+env/
+venv/
+.venv/
+
+# IDE files
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Database files (if any local)
+*.sqlite3
+
+# Pytest cache
+.pytest_cache/
+
+# Migrations (optional if using Alembic)
+alembic/versions/__pycache__/
+
+/backend/.env
+/backend/__pycache__/
+/backend/env/
+/backend/.gitignore

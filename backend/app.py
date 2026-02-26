@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from database import Base, engine
+from database import Base, SessionLocal, engine
 import models
 from routes.predict import router
 
@@ -14,6 +14,23 @@ def create_tables():
 async def health():
     return {"status": "ok"}
 
-@app.post("/predict")
-async def predict(data: dict):
-    return {"prediction": "This is a mock prediction based on the input data."}
+
+@app.get("/predict")
+async def predict():
+    session = SessionLocal()
+    try:
+        predictions = session.query(models.Prediction).all()
+        return predictions
+    finally:        
+        session.close()
+
+@app.get("/predict/{id}")
+async def predict_by_id(id: int):
+    session = SessionLocal()
+    try:
+        prediction = session.query(models.Prediction).filter(models.Prediction.id == id).first()
+        return prediction
+    except:
+        return {"error": "Prediction not found"}
+    finally:
+        session.close()

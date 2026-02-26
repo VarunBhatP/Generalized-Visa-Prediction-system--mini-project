@@ -12,7 +12,7 @@ DATABASE_URL = os.getenv("POSTGRES_URL")
 # Create engine (connects to PostgreSQL)
 engine = create_engine(
     DATABASE_URL,
-    echo=True  # shows SQL logs in terminal
+    echo=False  # shows SQL logs in terminal
 )
 
 # Session factory

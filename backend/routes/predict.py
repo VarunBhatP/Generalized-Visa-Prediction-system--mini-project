@@ -19,7 +19,9 @@ def predict(applicant: VisaApplicant, db: Session = Depends(get_db)):
     else:
         approval_status = False
 
-    # Step 2: Create DB Object
+     # Step 2: Create DB Object
+    #Actual implementation of this is below. We can use the model_dump() method to convert the Pydantic model to a dictionary, which we can then unpack into the Prediction constructor. This way, we avoid manually mapping each field.
+    """
     new_prediction = Prediction(
         age=applicant.age,
         nationality=applicant.nationality,
@@ -36,6 +38,12 @@ def predict(applicant: VisaApplicant, db: Session = Depends(get_db)):
         has_criminal_record=applicant.has_criminal_record,
         approval_status=approval_status
     )
+    """
+
+    data = applicant.model_dump()
+    data["approval_status"] = approval_status
+
+    new_prediction = Prediction(**data)
 
     # Step 3: Save to DB
     db.add(new_prediction)
