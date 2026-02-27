@@ -1,4 +1,5 @@
-from fastapi import FastAPI
+from schemas import PredictionResponse
+from fastapi import FastAPI, HTTPException
 from database import Base, SessionLocal, engine
 import models
 from routes.predict import router
@@ -34,3 +35,4 @@ async def predict_by_id(id: int):
         return {"error": "Prediction not found"}
     finally:
         session.close()
+

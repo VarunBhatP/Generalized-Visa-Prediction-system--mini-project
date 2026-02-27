@@ -1,12 +1,16 @@
+#This is just dummy logic, will attach the real working ML Model later.
+
+
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from database import get_db
 from models import Prediction
-from schemas import VisaApplicant
+from schemas import PredictionResponse, VisaApplicant, VisaApplicantUpdate
+from fastapi import HTTPException
 
 router = APIRouter()
 
-@router.post("/predict")
+@router.post("/predict", response_model=PredictionResponse)
 def predict(applicant: VisaApplicant, db: Session = Depends(get_db)):
 
     # Step 1: Decision Logic
@@ -51,4 +55,38 @@ def predict(applicant: VisaApplicant, db: Session = Depends(get_db)):
     db.refresh(new_prediction)
 
     # Step 4: Return Response
-    return {"approval_status": approval_status}
+    return PredictionResponse(approval_status=approval_status)
+
+#This function is just for demonstration of PATCH Method. You can replace it with your actual ML model logic later.
+def calculate_approval(data: dict) -> bool:
+    return (
+        data.get("bank_balance_usd", 0) > 5000 and
+        not data.get("has_criminal_record", False) and
+        data.get("prev_visa_rejections", 0) == 0
+    )
+
+@router.patch("/predict/{prediction_id}", response_model=PredictionResponse)
+def update_prediction(
+    prediction_id: int,
+    applicant_update: VisaApplicantUpdate,
+    db: Session = Depends(get_db)
+):
+    # 1. Fetch existing record
+    prediction = db.query(Prediction).filter(Prediction.id == prediction_id).first()
+    if not prediction:
+        raise HTTPException(status_code=404, detail="Prediction not found")
+
+    # 2. Update only fields provided in PATCH
+    update_data = applicant_update.model_dump(exclude_unset=True)
+    for key, value in update_data.items():
+        setattr(prediction, key, value)
+
+    # 3. Re-run approval logic with updated data
+    prediction.approval_status = calculate_approval(prediction.__dict__)
+
+    # 4. Save changes
+    db.commit()
+    db.refresh(prediction)
+
+    # 5. Return response
+    return PredictionResponse(approval_status=prediction.approval_status)
