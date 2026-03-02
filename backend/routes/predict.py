@@ -1,94 +1,97 @@
-#This is just dummy logic, will attach the real working ML Model later.
-
-
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
+
 from database import get_db
 from models import Prediction
 from schemas import PredictionResponse, VisaApplicant, VisaApplicantUpdate
-from fastapi import HTTPException
+from ml.inference import predict_visa
 
 router = APIRouter()
 
-#This function is just for demonstration of POST and PATCH Method. You can replace it with your actual ML model logic later.
-def calculate_approval(data: dict) -> bool:
-    return (
-        data.get("bank_balance_usd", 0) > 5000 and
-        not data.get("has_criminal_record", False) and
-        data.get("prev_visa_rejections", 0) == 0
-    )
 
+# ---------------- POST ----------------
 @router.post("/predict", response_model=PredictionResponse)
 def predict(applicant: VisaApplicant, db: Session = Depends(get_db)):
 
-    # Step 1: Decision Logic
-    if(calculate_approval(applicant.model_dump())):
-        approval_status = True
-    else:
-        approval_status = False
-
-     # Step 2: Create DB Object
-    #Actual implementation of this is below. We can use the model_dump() method to convert the Pydantic model to a dictionary, which we can then unpack into the Prediction constructor. This way, we avoid manually mapping each field.
-    """
-    new_prediction = Prediction(
-        age=applicant.age,
-        nationality=applicant.nationality,
-        marital_status=applicant.marital_status,
-        education_level=applicant.education_level,
-        destination_country=applicant.destination_country,
-        visa_type=applicant.visa_type,
-        duration_of_stay=applicant.duration_of_stay,
-        monthly_income_usd=applicant.monthly_income_usd,
-        bank_balance_usd=applicant.bank_balance_usd,
-        prev_countries_visited=applicant.prev_countries_visited,
-        prev_visa_rejections=applicant.prev_visa_rejections,
-        has_return_ticket=applicant.has_return_ticket,
-        has_criminal_record=applicant.has_criminal_record,
-        approval_status=approval_status
-    )
-    """
-
+    # Convert Pydantic → dict
     data = applicant.model_dump()
-    data["approval_status"] = approval_status
 
+    # ML inference
+    prediction, probability = predict_visa(data)
+
+    approval_status = bool(prediction)
+
+    # Add ML outputs
+    data["approval_status"] = approval_status
+    data["approval_probability"] = probability
+
+    # Create DB object
     new_prediction = Prediction(**data)
 
-    # Step 3: Save to DB
     db.add(new_prediction)
     db.commit()
     db.refresh(new_prediction)
 
-    # Step 4: Return Response
-    return PredictionResponse(approval_status=approval_status)
+    return PredictionResponse(
+        approval_status=approval_status,
+        approval_probability=probability
+    )
 
 
-
+# ---------------- PATCH ----------------
 @router.patch("/predict/{prediction_id}", response_model=PredictionResponse)
 def update_prediction(
     prediction_id: int,
     applicant_update: VisaApplicantUpdate,
     db: Session = Depends(get_db)
 ):
-    # 1. Fetch existing record
-    prediction = db.query(Prediction).filter(Prediction.id == prediction_id).first()
+
+    prediction = (
+        db.query(Prediction)
+        .filter(Prediction.id == prediction_id)
+        .first()
+    )
+
     if not prediction:
         raise HTTPException(status_code=404, detail="Prediction not found")
 
-    # 2. Update only fields provided in PATCH
+    # Update provided fields only
     update_data = applicant_update.model_dump(exclude_unset=True)
+
     for key, value in update_data.items():
         setattr(prediction, key, value)
 
-    # 3. Re-run approval logic with updated data
-    prediction.approval_status = calculate_approval({
-    column.name: getattr(prediction, column.name)
-    for column in Prediction.__table__.columns
-    if column.name != "id"  # Exclude ID from logic
-        })
+    # Build dictionary from updated SQLAlchemy object
+    model_data = {
+        column.name: getattr(prediction, column.name)
+        for column in Prediction.__table__.columns
+        if column.name not in ["id", "approval_status", "approval_probability", "created_at"]
+    }
 
-    # 4. Save changes
+    # Re-run ML prediction
+    new_prediction, new_probability = predict_visa(model_data)
+
+    prediction.approval_status = bool(new_prediction)
+    prediction.approval_probability = new_probability
+
     db.commit()
     db.refresh(prediction)
 
-    # 5. Return response
-    return PredictionResponse(approval_status=prediction.approval_status)
+    return PredictionResponse(
+        approval_status=prediction.approval_status,
+        approval_probability=prediction.approval_probability
+    )
+
+
+# ---------------- GET ALL ----------------
+@router.get("/predict")
+def get_all_predictions(db: Session = Depends(get_db)):
+    return db.query(Prediction).all()
+
+
+@router.get("/predict/{id}")
+def get_prediction(id: int, db: Session = Depends(get_db)):
+    prediction = db.query(Prediction).filter(Prediction.id == id).first()
+    if not prediction:
+        raise HTTPException(404, "Prediction not found")
+    return prediction

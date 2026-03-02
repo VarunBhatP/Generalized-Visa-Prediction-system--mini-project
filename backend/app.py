@@ -1,38 +1,28 @@
-from schemas import PredictionResponse
-from fastapi import FastAPI, HTTPException
-from database import Base, SessionLocal, engine
-import models
-from routes.predict import router
+from fastapi import FastAPI
+from database import Base, engine
+from routes.predict import router 
+from ml.inference import load_model
+
+app = FastAPI(title="Visa AI Backend")
 
 
-app = FastAPI()
-app.include_router(router)
+# ---------- STARTUP ----------
 @app.on_event("startup")
-def create_tables():
+def startup_event():
+    # create DB tables
     Base.metadata.create_all(bind=engine)
 
+    # load ML model once
+    load_model()
+
+    print("✅ Application startup complete")
+
+
+# ---------- ROUTERS ----------
+app.include_router(router)
+
+
+# ---------- HEALTH CHECK ----------
 @app.get("/health")
-async def health():
+def health():
     return {"status": "ok"}
-
-
-@app.get("/predict")
-async def predict():
-    session = SessionLocal()
-    try:
-        predictions = session.query(models.Prediction).all()
-        return predictions
-    finally:        
-        session.close()
-
-@app.get("/predict/{id}")
-async def predict_by_id(id: int):
-    session = SessionLocal()
-    try:
-        prediction = session.query(models.Prediction).filter(models.Prediction.id == id).first()
-        return prediction
-    except:
-        return {"error": "Prediction not found"}
-    finally:
-        session.close()
-
