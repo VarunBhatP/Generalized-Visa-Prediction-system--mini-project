@@ -10,15 +10,19 @@ from fastapi import HTTPException
 
 router = APIRouter()
 
+#This function is just for demonstration of POST and PATCH Method. You can replace it with your actual ML model logic later.
+def calculate_approval(data: dict) -> bool:
+    return (
+        data.get("bank_balance_usd", 0) > 5000 and
+        not data.get("has_criminal_record", False) and
+        data.get("prev_visa_rejections", 0) == 0
+    )
+
 @router.post("/predict", response_model=PredictionResponse)
 def predict(applicant: VisaApplicant, db: Session = Depends(get_db)):
 
     # Step 1: Decision Logic
-    if (
-        applicant.bank_balance_usd > 5000 and
-        not applicant.has_criminal_record and
-        applicant.prev_visa_rejections == 0
-    ):
+    if(calculate_approval(applicant.model_dump())):
         approval_status = True
     else:
         approval_status = False
@@ -57,13 +61,7 @@ def predict(applicant: VisaApplicant, db: Session = Depends(get_db)):
     # Step 4: Return Response
     return PredictionResponse(approval_status=approval_status)
 
-#This function is just for demonstration of PATCH Method. You can replace it with your actual ML model logic later.
-def calculate_approval(data: dict) -> bool:
-    return (
-        data.get("bank_balance_usd", 0) > 5000 and
-        not data.get("has_criminal_record", False) and
-        data.get("prev_visa_rejections", 0) == 0
-    )
+
 
 @router.patch("/predict/{prediction_id}", response_model=PredictionResponse)
 def update_prediction(
@@ -82,7 +80,11 @@ def update_prediction(
         setattr(prediction, key, value)
 
     # 3. Re-run approval logic with updated data
-    prediction.approval_status = calculate_approval(prediction.__dict__)
+    prediction.approval_status = calculate_approval({
+    column.name: getattr(prediction, column.name)
+    for column in Prediction.__table__.columns
+    if column.name != "id"  # Exclude ID from logic
+        })
 
     # 4. Save changes
     db.commit()
