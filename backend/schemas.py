@@ -1,40 +1,97 @@
 from typing import Optional
+from pydantic import BaseModel, Field
+from typing_extensions import Literal
+from enum import Enum
 
-from pydantic import BaseModel
 
-#input schema for visa applicant
+
 class VisaApplicant(BaseModel):
-    age: int
-    nationality: str
-    marital_status: str
-    education_level: str
-    destination_country: str
-    visa_type: str
-    duration_of_stay: int
-    monthly_income_usd: int
-    bank_balance_usd: int
-    prev_countries_visited: int
-    prev_visa_rejections: int
-    has_return_ticket: bool
-    has_criminal_record: bool
-    
-#output schema for prediction response
+    # Numerical
+    age: int = Field(..., ge=0, le=120)
+    education_level: int = Field(..., ge=0, le=3)
+    duration_of_stay: int = Field(..., ge=1, le=365)
+    monthly_income_usd: float = Field(..., ge=0)
+    bank_balance_usd: float = Field(..., ge=0)
+    prev_countries_visited: int = Field(..., ge=0)
+    prev_visa_rejections: int = Field(..., ge=0)
+    has_return_ticket: int = Field(..., ge=0, le=1)
+    has_criminal_record: int = Field(..., ge=0, le=1)
+
+    nationality: Literal[
+        "Canadian",
+        "Chinese",
+        "German",
+        "Indian",
+        "American",
+        "Nigerian",
+        "Australian",
+        "British"
+    ]
+
+    marital_status: Literal[
+        "Single",
+        "Divorced",
+        "Married"
+    ]
+
+    visa_type: Literal[
+        "Tourist",
+        "Student",
+        "Work"
+    ]
+
+    destination_country: Literal[
+        "Canada",
+        "France",
+        "Germany",
+        "UK",
+        "USA"
+    ]
+
+
 class PredictionResponse(BaseModel):
     approval_status: bool
-
+    approval_probability: float
 
 
 class VisaApplicantUpdate(BaseModel):
-    age: Optional[int]
-    nationality: Optional[str]
-    marital_status: Optional[str]
-    education_level: Optional[str]
-    destination_country: Optional[str]
-    visa_type: Optional[str]
-    duration_of_stay: Optional[int]
-    monthly_income_usd: Optional[float]
-    bank_balance_usd: Optional[float]
-    prev_countries_visited: Optional[int]
-    prev_visa_rejections: Optional[int]
-    has_return_ticket: Optional[bool]
-    has_criminal_record: Optional[bool]
+    age: Optional[int] = Field(None, ge=0, le=120)
+    education_level: Optional[int] = Field(None, ge=0, le=10)
+    duration_of_stay: Optional[int] = Field(None, ge=1, le=365)
+    monthly_income_usd: Optional[float] = Field(None, ge=0)
+    bank_balance_usd: Optional[float] = Field(None, ge=0)
+    prev_countries_visited: Optional[int] = Field(None, ge=0)
+    prev_visa_rejections: Optional[int] = Field(None, ge=0)
+    has_return_ticket: Optional[int] = Field(None, ge=0, le=1)
+    has_criminal_record: Optional[int] = Field(None, ge=0, le=1)
+
+    nationality: Optional[Literal[
+        "Canadian",
+        "Chinese",
+        "German",
+        "Indian",
+        "American",
+        "Nigerian",
+        "Australian",
+        "British"
+    ]]
+
+    marital_status: Optional[Literal[
+        "Single",
+        "Divorced",
+        "Married"
+    ]]
+
+    visa_type: Optional[Literal[
+        "Tourist",
+        "Student",
+        "Work"
+    ]]
+
+    destination_country: Optional[Literal[
+        "Canada",
+        "France",
+        "Germany",
+        "UK",
+        "USA"
+    ]]

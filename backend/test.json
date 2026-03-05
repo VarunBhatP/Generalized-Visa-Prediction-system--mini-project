@@ -1,0 +1,15 @@
+{
+  "age": 22,
+  "education_level": 0,
+  "duration_of_stay": 36,
+  "monthly_income_usd": 900,
+  "bank_balance_usd": 1200,
+  "prev_countries_visited": 0,
+  "prev_visa_rejections": 3,
+  "has_return_ticket": 0,
+  "has_criminal_record": 1,
+  "nationality": "Indian",
+  "marital_status": "Single",
+  "destination_country": "Canada",
+  "visa_type": "Work"
+}

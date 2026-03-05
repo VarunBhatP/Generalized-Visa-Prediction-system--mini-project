@@ -1,44 +1,62 @@
 import joblib
 import pandas as pd
-
-model = None   # global model holder
-
+from ml.feature_engineering import apply_feature_engineering
+import os
+model = None
 
 def load_model():
     global model
-    model = joblib.load("ml/model.pkl")
-    print("✅ ML model loaded")
+
+    BASE_DIR = os.path.dirname(__file__)
+    MODEL_PATH = os.path.join(BASE_DIR, "models", "v1", "model.pkl")
+
+    model = joblib.load(MODEL_PATH)
+
+    print("✅ Model loaded successfully")
+
+MODEL_COLUMNS = [
+    'age','education_level','duration_of_stay','monthly_income_usd',
+    'bank_balance_usd','prev_countries_visited','prev_visa_rejections',
+    'has_return_ticket','has_criminal_record',
+
+    'nationality_Australian','nationality_British','nationality_Canadian',
+    'nationality_Chinese','nationality_German','nationality_Indian',
+    'nationality_Nigerian',
+
+    'marital_status_Married','marital_status_Single',
+
+    'destination_country_Canada','destination_country_France',
+    'destination_country_Germany','destination_country_UK',
+    'destination_country_USA',
+
+    'visa_type_Tourist','visa_type_Work'
+]
+
+
+def convert_to_model_format(data: dict):
+    row = dict.fromkeys(MODEL_COLUMNS, 0)
+
+    # Copy numeric fields
+    for key in [
+        'age','education_level','duration_of_stay','monthly_income_usd',
+        'bank_balance_usd','prev_countries_visited','prev_visa_rejections',
+        'has_return_ticket','has_criminal_record'
+    ]:
+        row[key] = data[key]
+
+    # One-hot encoding
+    row[f"nationality_{data['nationality']}"] = 1
+    row[f"marital_status_{data['marital_status']}"] = 1
+    row[f"destination_country_{data['destination_country']}"] = 1
+    row[f"visa_type_{data['visa_type']}"] = 1
+
+    return pd.DataFrame([row])
 
 
 def predict_visa(data: dict):
-    if model is None:
-        raise RuntimeError("Model not loaded")
-
-    df = pd.DataFrame([data])
+    df = convert_to_model_format(data)
 
     prediction = model.predict(df)[0]
     probability = model.predict_proba(df)[0][1]
 
-    return prediction, float(probability)
-
-def engineer_features(data: dict) -> dict:
-    
-  
-    
-    data["financial_stability_score"] = (
-        data["bank_balance_usd"] +
-        data["monthly_income_usd"] * 6
-    )
-
-    data["travel_risk_score"] = (
-        data["prev_visa_rejections"] * 2 +
-        (0 if data["has_return_ticket"] else 3) +
-        (5 if data["has_criminal_record"] else 0)
-    )
-
-    data["profile_strength_index"] = (
-        data["prev_countries_visited"] +
-        (2 if data["education_level"] in ["bachelors", "masters", "phd"] else 0)
-    )
-
-    return data
+    return prediction, probability

@@ -23,8 +23,8 @@ def predict(applicant: VisaApplicant, db: Session = Depends(get_db)):
 
     # Add ML outputs
     data["approval_status"] = approval_status
-    data["approval_probability"] = probability
-
+    
+    print("Probability:", probability)
     # Create DB object
     new_prediction = Prediction(**data)
 
@@ -32,10 +32,10 @@ def predict(applicant: VisaApplicant, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(new_prediction)
 
-    return PredictionResponse(
-        approval_status=approval_status,
-        approval_probability=probability
-    )
+    return {
+    "approval_status": approval_status,
+    "approval_probability": probability
+}
 
 
 # ---------------- PATCH ----------------
@@ -44,7 +44,7 @@ def update_prediction(
     prediction_id: int,
     applicant_update: VisaApplicantUpdate,
     db: Session = Depends(get_db)
-):
+) -> dict:
 
     prediction = (
         db.query(Prediction)
@@ -65,22 +65,22 @@ def update_prediction(
     model_data = {
         column.name: getattr(prediction, column.name)
         for column in Prediction.__table__.columns
-        if column.name not in ["id", "approval_status", "approval_probability", "created_at"]
+        if column.name not in ["id", "approval_status", "created_at"]
     }
 
     # Re-run ML prediction
     new_prediction, new_probability = predict_visa(model_data)
 
     prediction.approval_status = bool(new_prediction)
-    prediction.approval_probability = new_probability
+    
 
     db.commit()
     db.refresh(prediction)
 
-    return PredictionResponse(
-        approval_status=prediction.approval_status,
-        approval_probability=prediction.approval_probability
-    )
+    return {
+    "approval_status": bool(new_prediction),
+    "approval_probability": new_probability
+}
 
 
 # ---------------- GET ALL ----------------
@@ -95,3 +95,13 @@ def get_prediction(id: int, db: Session = Depends(get_db)):
     if not prediction:
         raise HTTPException(404, "Prediction not found")
     return prediction
+
+# ---------------- DELETE ----------------
+@router.delete("/predict/{id}")
+def delete_prediction(id: int, db: Session = Depends(get_db)):
+    prediction = db.query(Prediction).filter(Prediction.id == id).first()
+    if not prediction:
+        raise HTTPException(404, "Prediction not found")
+    db.delete(prediction)
+    db.commit()
+    return {"detail": "Prediction deleted successfully"}
