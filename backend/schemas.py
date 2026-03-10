@@ -41,6 +41,7 @@ class VisaApplicant(BaseModel):
     ]
 
     destination_country: Literal[
+        "Australia",
         "Canada",
         "France",
         "Germany",
@@ -89,6 +90,7 @@ class VisaApplicantUpdate(BaseModel):
     ]]
 
     destination_country: Optional[Literal[
+        "Australia",
         "Canada",
         "France",
         "Germany",

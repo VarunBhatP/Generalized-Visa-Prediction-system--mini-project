@@ -7,13 +7,13 @@ import os
 # Load environment variables
 load_dotenv()
 
-DATABASE_URL = os.getenv("POSTGRES_URL")
+# Try DATABASE_URL first, fall back to local SQLite for easy local dev
+DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./visa.db")
 
-# Create engine (connects to PostgreSQL)
-engine = create_engine(
-    DATABASE_URL,
-    echo=False  # shows SQL logs in terminal
-)
+# SQLite needs an extra arg; Postgres/psycopg2 does not
+connect_args = {"check_same_thread": False} if DATABASE_URL.startswith("sqlite") else {}
+
+engine = create_engine(DATABASE_URL, echo=False, connect_args=connect_args)
 
 # Session factory
 SessionLocal = sessionmaker(
