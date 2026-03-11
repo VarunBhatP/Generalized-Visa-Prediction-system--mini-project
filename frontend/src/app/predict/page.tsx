@@ -7,40 +7,19 @@ import QuestionStep from "@/components/predict/QuestionStep";
 import ResultCard from "@/components/predict/ResultCard";
 import SearchableSelect from "@/components/predict/SearchableSelect";
 
-// ---------- Backend field types ----------
-interface Answers {
-    nationality: string;
-    destination_country: string;
-    visa_type: string;
-    marital_status: string;
-    age: string;
-    education_level: string;
-    monthly_income_usd: string;
-    bank_balance_usd: string;
-    duration_of_stay: string;
-    prev_countries_visited: string;
-    prev_visa_rejections: string;
-    has_return_ticket: string;
-    has_criminal_record: string;
-}
-
-// Enum options matching backend Literal types
-const NATIONALITIES = ["Canadian", "Chinese", "German", "Indian", "American", "Nigerian", "Australian", "British"];
-const DESTINATIONS = ["Australia", "Canada", "France", "Germany", "UK", "USA"];
-const VISA_TYPES = ["Tourist", "Student", "Work"];
-const MARITAL_STATUSES = ["Single", "Married", "Divorced"];
-const EDUCATION_LABELS: Record<number, string> = { 0: "High School", 1: "Bachelor's", 2: "Master's", 3: "PhD" };
-
-const inputClass =
-    "w-full bg-transparent border-b border-white/20 focus:border-white/60 outline-none text-white/90 text-2xl font-light py-3 placeholder-white/20 transition-colors duration-300";
-
-const cardClass =
-    "px-5 py-3.5 rounded-xl border border-white/10 bg-white/[0.03] cursor-pointer transition-all duration-300 text-white/50 text-sm tracking-wide hover:bg-white/[0.06] hover:border-white/25 hover:text-white/80";
-
-const cardActiveClass =
-    "px-5 py-3.5 rounded-xl border cursor-pointer transition-all duration-300 text-sm tracking-wide bg-white/[0.08] border-white/40 text-white/95";
-
-const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8000";
+import PickerCard from "@/components/predict/PickerCard";
+import {
+    type Answers,
+    NATIONALITIES,
+    DESTINATIONS,
+    VISA_TYPES,
+    MARITAL_STATUSES,
+    EDUCATION_LABELS,
+    inputClass,
+    cardClass,
+    cardActiveClass,
+    BACKEND_URL
+} from "@/app/predict/constants";
 
 export default function PredictPage() {
     const [step, setStep] = useState(0);
@@ -169,27 +148,7 @@ export default function PredictPage() {
         ]
         : [];
 
-    const PickerCard = ({
-        options,
-        value,
-        field,
-    }: {
-        options: string[];
-        value: string;
-        field: keyof Answers;
-    }) => (
-        <div className="flex flex-wrap gap-3">
-            {options.map((opt) => (
-                <button
-                    key={opt}
-                    onClick={() => update(field, opt)}
-                    className={value === opt ? cardActiveClass : cardClass}
-                >
-                    {opt}
-                </button>
-            ))}
-        </div>
-    );
+
 
     const steps = [
         {
@@ -219,12 +178,12 @@ export default function PredictPage() {
         {
             label: "Step 3 — Visa Type",
             question: "What type of visa are\nyou applying for?",
-            input: <PickerCard options={VISA_TYPES} value={answers.visa_type} field="visa_type" />,
+            input: <PickerCard options={VISA_TYPES} value={answers.visa_type} onUpdate={(val) => update("visa_type", val)} />,
         },
         {
             label: "Step 4 — Marital Status",
             question: "What is your marital status?",
-            input: <PickerCard options={MARITAL_STATUSES} value={answers.marital_status} field="marital_status" />,
+            input: <PickerCard options={MARITAL_STATUSES} value={answers.marital_status} onUpdate={(val) => update("marital_status", val)} />,
         },
         {
             label: "Step 5 — Age",

@@ -96,7 +96,7 @@ const steps: Step[] = [
 
 export default function HowItWorks() {
     return (
-        <section className="w-full bg-[#080808] border-t border-white/5">
+        <section className="w-full bg-[#0a0a0a] pt-20">
             {/* Section Heading */}
             <div className="px-8 md:px-12 lg:px-20 pt-20 pb-12">
                 <p className="text-xs tracking-widest uppercase text-white/25 mb-4 font-medium font-mono">The Intelligence Engine</p>
@@ -131,7 +131,7 @@ export default function HowItWorks() {
                         </p>
 
                         {/* Stats at bottom */}
-                        <div className="mt-auto border-t border-white/10">
+                        <div className="mt-auto border-t border-white/10 py-6">
                             {step.stats.map((stat, i) => (
                                 <div
                                     key={i}

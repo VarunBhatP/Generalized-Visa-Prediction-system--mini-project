@@ -4,6 +4,7 @@ import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
 import HowItWorks from "@/components/HowItWorks";
 import RankingFactors from "@/components/RankingFactors";
+import SiteHeader from "@/components/SiteHeader";
 
 // Dynamic import for the interactive background globe
 const InteractiveGlobe = dynamic(() => import("@/components/InteractiveGlobe"), {
@@ -26,31 +27,7 @@ export default function Home() {
       <div className="relative z-20 flex flex-col h-screen w-full px-6 py-8 md:px-12 lg:px-20 pointer-events-none">
 
         {/* Navigation Layer */}
-        <nav className="flex flex-wrap items-center justify-between w-full pointer-events-auto">
-          {/* Logo */}
-          <div className="text-xl md:text-2xl font-light tracking-tight w-full md:w-auto mb-4 md:mb-0">
-            GlobalVisa<sup className="text-[10px] ml-0.5">®</sup>
-          </div>
-
-          {/* Links */}
-          <div className="hidden md:flex space-x-12 lg:space-x-20 text-xs md:text-sm tracking-widest text-[#a1a1aa] items-center">
-            <span className="w-1 h-1 bg-white/20 rounded-full" />
-            <a href="/predict" className="hover:text-white transition-colors">Predict</a>
-            <span className="w-1 h-1 bg-white/20 rounded-full" />
-            <a href="#how-it-works" className="hover:text-white transition-colors">How it Works</a>
-            <span className="w-1 h-1 bg-white/20 rounded-full" />
-            <a href="#ranking-factors" className="hover:text-white transition-colors">Key Factors</a>
-            <span className="w-1 h-1 bg-white/20 rounded-full" />
-          </div>
-
-          {/* CTA */}
-          <a
-            href="/predict"
-            className="px-6 py-2.5 rounded-full border border-white/20 bg-white/5 backdrop-blur-md hover:bg-white/10 hover:border-white/40 transition-all text-xs tracking-widest uppercase text-white/90 shadow-2xl"
-          >
-            Start Assessment
-          </a>
-        </nav>
+        <SiteHeader />
 
         {/* Hero Typography */}
         <div className="flex-1 flex flex-col justify-center mt-12 md:mt-0">
@@ -79,7 +56,7 @@ export default function Home() {
         >
           {/* Paragraph */}
           <div className="max-w-sm pointer-events-auto border-l border-white/10 pl-6 mb-8 md:mb-0">
-            <p className="text-sm text-[#82828b] leading-relaxed font-light">
+            <p className="text-sm md:text-base text-[#82828b] leading-relaxed font-light">
               We replace uncertainty with data. By analyzing global travel patterns,
               financial requirements, and historical approval rates, we
               illuminate your path across borders.
