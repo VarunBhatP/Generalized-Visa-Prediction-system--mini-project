@@ -8,7 +8,7 @@ import os
 load_dotenv()
 
 # Try DATABASE_URL first, fall back to local SQLite for easy local dev
-DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./visa.db")
+DATABASE_URL = os.getenv("DATABASE_URL")
 
 # SQLite needs an extra arg; Postgres/psycopg2 does not
 connect_args = {"check_same_thread": False} if DATABASE_URL.startswith("sqlite") else {}
