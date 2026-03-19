@@ -6,8 +6,7 @@ import HowItWorks from "@/components/HowItWorks";
 import RankingFactors from "@/components/RankingFactors";
 import SiteHeader from "@/components/SiteHeader";
 
-// Dynamic import for the interactive background globe
-const InteractiveGlobe = dynamic(() => import("@/components/InteractiveGlobe"), {
+const WebGPUEarth = dynamic(() => import("@/components/WebGPUEarth"), {
   ssr: false,
 });
 
@@ -16,7 +15,7 @@ export default function Home() {
     <main className="relative h-screen w-full bg-[#0a0a0a] text-[#f4f4f5] font-sans selection:bg-white/20 overflow-y-auto overflow-x-hidden">
       {/* 3D Background Globe */}
       <div className="absolute top-0 right-[-30%] w-[100%] h-screen flex items-center justify-end z-0 pointer-events-auto transform scale-[1.5] translate-y-[15%]">
-        <InteractiveGlobe />
+        <WebGPUEarth width="100%" height="100%" />
       </div>
 
       {/* Cinematic Overlays to mimic the lighting in the image */}
