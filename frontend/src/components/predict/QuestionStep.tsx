@@ -44,12 +44,12 @@ export default function QuestionStep({
                 className="w-full max-w-2xl mx-auto flex flex-col"
             >
                 {/* Step label */}
-                <p className="text-sm tracking-widest uppercase text-white/30 mb-6 font-light">
+                <p className="text-xl tracking-widest uppercase text-[#2a2421] dark:text-white/50 mb-6 font-light">
                     {label}
                 </p>
 
                 {/* Question */}
-                <h2 className="text-3xl md:text-5xl font-medium tracking-tight text-white/95 mb-10 leading-[1.1]">
+                <h2 className="text-3xl md:text-5xl font-medium tracking-tight text-[#2a2421]/95 dark:text-white/95 mb-10 leading-[1.1]">
                     {question}
                 </h2>
 
@@ -62,7 +62,7 @@ export default function QuestionStep({
                     {!isFirst ? (
                         <button
                             onClick={onBack}
-                            className="text-sm tracking-widest uppercase text-white/25 hover:text-white/60 transition-colors"
+                            className="px-8 py-3 rounded-full border border-[#2a2421]/20 dark:border-white/20 bg-[#2a2421]/5 dark:bg-white/5 backdrop-blur-md hover:bg-[#2a2421]/10 dark:hover:bg-white/10 hover:border-[#2a2421]/40 dark:hover:border-white/40 transition-all text-sm tracking-widest uppercase text-[#2a2421]/90 dark:text-white/90 shadow-2xl disabled:opacity-30 disabled:cursor-not-allowed"
                         >
                             ← Back
                         </button>
@@ -74,7 +74,7 @@ export default function QuestionStep({
                     <button
                         onClick={onNext}
                         disabled={!canProceed}
-                        className="px-8 py-3 rounded-full border border-white/20 bg-white/5 backdrop-blur-md hover:bg-white/10 hover:border-white/40 transition-all text-sm tracking-widest uppercase text-white/90 shadow-2xl disabled:opacity-30 disabled:cursor-not-allowed"
+                        className="px-8 py-3 rounded-full border border-[#2a2421]/20 dark:border-white/20 bg-[#2a2421]/5 dark:bg-white/5 backdrop-blur-md hover:bg-[#2a2421]/10 dark:hover:bg-white/10 hover:border-[#2a2421]/40 dark:hover:border-white/40 transition-all text-sm tracking-widest uppercase text-[#2a2421]/90 dark:text-white/90 shadow-2xl disabled:opacity-30 disabled:cursor-not-allowed"
                     >
                         {isLast ? "Get Results →" : "Next →"}
                     </button>

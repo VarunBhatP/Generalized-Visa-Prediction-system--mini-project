@@ -197,15 +197,15 @@ export default function WebGPUEarth({ className = "", width = "100%", height = "
       if (currentMount && renderer.domElement && currentMount.contains(renderer.domElement)) {
         currentMount.removeChild(renderer.domElement);
       }
-      renderer.dispose();
-      globeMaterial.dispose();
-      atmosphereMaterial.dispose();
-      sphereGeometry.dispose();
-      dayTexture.dispose();
-      nightTexture.dispose();
-      bumpRoughnessCloudsTexture.dispose();
-      timer.dispose();
-      controls.dispose();
+      try { renderer.dispose(); } catch (e) {}
+      try { globeMaterial.dispose(); } catch (e) {}
+      try { atmosphereMaterial.dispose(); } catch (e) {}
+      try { sphereGeometry.dispose(); } catch (e) {}
+      try { dayTexture.dispose(); } catch (e) {}
+      try { nightTexture.dispose(); } catch (e) {}
+      try { bumpRoughnessCloudsTexture.dispose(); } catch (e) {}
+      try { timer.dispose(); } catch (e) {}
+      try { controls.dispose(); } catch (e) {}
     };
   }, []);
 

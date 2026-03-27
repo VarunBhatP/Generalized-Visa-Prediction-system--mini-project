@@ -8,6 +8,7 @@ import ResultCard from "@/components/predict/ResultCard";
 import SearchableSelect from "@/components/predict/SearchableSelect";
 
 import PickerCard from "@/components/predict/PickerCard";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import {
     type Answers,
     NATIONALITIES,
@@ -271,16 +272,16 @@ export default function PredictPage() {
                 <div className="flex items-center gap-6">
                     <button
                         onClick={() => update("prev_countries_visited", String(Math.max(0, parseInt(answers.prev_countries_visited || "0") - 1)))}
-                        className="w-12 h-12 rounded-full border border-white/20 bg-white/[0.03] text-white/70 text-2xl hover:bg-white/[0.08] transition-all"
+                        className="w-12 h-12 rounded-full border border-[#2a2421]/20 dark:border-white/20 bg-[#2a2421]/[0.03] dark:bg-white/[0.03] text-[#2a2421]/70 dark:text-white/70 text-2xl hover:bg-[#2a2421]/[0.08] dark:hover:bg-white/[0.08] transition-all"
                     >
                         −
                     </button>
-                    <span className="text-5xl font-light text-white/90 w-16 text-center">
+                    <span className="text-5xl font-light text-[#2a2421]/90 dark:text-white/90 w-16 text-center">
                         {answers.prev_countries_visited || "0"}
                     </span>
                     <button
                         onClick={() => update("prev_countries_visited", String(parseInt(answers.prev_countries_visited || "0") + 1))}
-                        className="w-12 h-12 rounded-full border border-white/20 bg-white/[0.03] text-white/70 text-2xl hover:bg-white/[0.08] transition-all"
+                        className="w-12 h-12 rounded-full border border-[#2a2421]/20 dark:border-white/20 bg-[#2a2421]/[0.03] dark:bg-white/[0.03] text-[#2a2421]/70 dark:text-white/70 text-2xl hover:bg-[#2a2421]/[0.08] dark:hover:bg-white/[0.08] transition-all"
                     >
                         +
                     </button>
@@ -294,16 +295,16 @@ export default function PredictPage() {
                 <div className="flex items-center gap-6">
                     <button
                         onClick={() => update("prev_visa_rejections", String(Math.max(0, parseInt(answers.prev_visa_rejections || "0") - 1)))}
-                        className="w-12 h-12 rounded-full border border-white/20 bg-white/[0.03] text-white/70 text-2xl hover:bg-white/[0.08] transition-all"
+                        className="w-12 h-12 rounded-full border border-[#2a2421]/20 dark:border-white/20 bg-[#2a2421]/[0.03] dark:bg-white/[0.03] text-[#2a2421]/70 dark:text-white/70 text-2xl hover:bg-[#2a2421]/[0.08] dark:hover:bg-white/[0.08] transition-all"
                     >
                         −
                     </button>
-                    <span className="text-5xl font-light text-white/90 w-16 text-center">
+                    <span className="text-5xl font-light text-[#2a2421]/90 dark:text-white/90 w-16 text-center">
                         {answers.prev_visa_rejections || "0"}
                     </span>
                     <button
                         onClick={() => update("prev_visa_rejections", String(parseInt(answers.prev_visa_rejections || "0") + 1))}
-                        className="w-12 h-12 rounded-full border border-white/20 bg-white/[0.03] text-white/70 text-2xl hover:bg-white/[0.08] transition-all"
+                        className="w-12 h-12 rounded-full border border-[#2a2421]/20 dark:border-white/20 bg-[#2a2421]/[0.03] dark:bg-white/[0.03] text-[#2a2421]/70 dark:text-white/70 text-2xl hover:bg-[#2a2421]/[0.08] dark:hover:bg-white/[0.08] transition-all"
                     >
                         +
                     </button>
@@ -320,8 +321,8 @@ export default function PredictPage() {
                             key={opt}
                             onClick={() => update("has_return_ticket", opt)}
                             className={`flex-1 py-5 text-lg font-light rounded-2xl border transition-all duration-300 ${answers.has_return_ticket === opt
-                                ? "bg-white/[0.08] border-white/40 text-white/95"
-                                : "bg-white/[0.02] border-white/10 text-white/40 hover:border-white/20"
+                                ? "bg-[#2a2421]/[0.08] dark:bg-white/[0.08] border-[#2a2421]/40 dark:border-white/40 text-[#2a2421]/95 dark:text-white/95"
+                                : "bg-[#2a2421]/[0.02] dark:bg-white/[0.02] border-[#2a2421]/10 dark:border-white/10 text-[#2a2421]/40 dark:text-white/40 hover:border-[#2a2421]/20 dark:hover:border-white/20"
                                 }`}
                         >
                             {opt}
@@ -340,8 +341,8 @@ export default function PredictPage() {
                             key={opt}
                             onClick={() => update("has_criminal_record", opt)}
                             className={`flex-1 py-5 text-lg font-light rounded-2xl border transition-all duration-300 ${answers.has_criminal_record === opt
-                                ? "bg-white/[0.08] border-white/40 text-white/95"
-                                : "bg-white/[0.02] border-white/10 text-white/40 hover:border-white/20"
+                                ? "bg-[#2a2421]/[0.08] dark:bg-white/[0.08] border-[#2a2421]/40 dark:border-white/40 text-[#2a2421]/95 dark:text-white/95"
+                                : "bg-[#2a2421]/[0.02] dark:bg-white/[0.02] border-[#2a2421]/10 dark:border-white/10 text-[#2a2421]/40 dark:text-white/40 hover:border-[#2a2421]/20 dark:hover:border-white/20"
                                 }`}
                         >
                             {opt}
@@ -356,16 +357,19 @@ export default function PredictPage() {
     const isStepperStep = step === 9 || step === 10;
 
     return (
-        <main className="relative min-h-screen w-full bg-[#0a0a0a] text-[#f4f4f5] font-sans selection:bg-white/20 flex flex-col">
+        <main className="relative min-h-screen w-full bg-[#fdfbf7] dark:bg-[#0a0a0a] text-[#1a1a1a] dark:text-[#f4f4f5] font-sans selection:bg-[#2a2421]/20 dark:selection:bg-white/20 flex flex-col">
             {/* Header + full-width progress bar */}
-            <div className="sticky top-0 z-50 bg-[#0a0a0a]/90 backdrop-blur-md border-b border-white/5">
+            <div className="sticky top-0 z-50 bg-[#fdfbf7]/90 dark:bg-[#0a0a0a]/90 backdrop-blur-md border-b border-[#2a2421]/5 dark:border-white/5">
                 <div className="px-6 md:px-12 lg:px-20 py-4 flex items-center justify-between">
-                    <a href="/" className="text-white/25 hover:text-white/60 transition-colors text-xs tracking-widest uppercase">
+                    <a href="/" className="text-[#2a2421]/80 dark:text-white/70 hover:text-[#2a2421] dark:hover:text-white transition-colors text-xs tracking-widest uppercase">
                         ← Home
                     </a>
-                    <span className="text-[10px] tracking-widest uppercase text-white/20 font-mono">
-                        {showResult ? "Complete" : `Step ${step + 1} / ${TOTAL}`}
-                    </span>
+                    <div className="flex items-center gap-4">
+                        <span className="text-xs tracking-widest uppercase text-[#2a2421]/70 dark:text-white/70 font-mono">
+                            {showResult ? "Complete" : `Step ${step + 1} / ${TOTAL}`}
+                        </span>
+                        <ThemeToggle />
+                    </div>
                 </div>
                 <ProgressBar current={showResult ? TOTAL : step + 1} total={TOTAL} />
             </div>
@@ -381,8 +385,8 @@ export default function PredictPage() {
                             exit={{ opacity: 0 }}
                             className="flex flex-col items-center gap-5"
                         >
-                            <div className="w-12 h-12 rounded-full border-2 border-white/10 border-t-[#06b6d4] animate-spin" />
-                            <p className="text-white/30 text-sm tracking-widest uppercase">Analyzing your profile…</p>
+                            <div className="w-12 h-12 rounded-full border-2 border-[#2a2421]/10 dark:border-white/10 border-t-[#037e11] animate-spin" />
+                            <p className="text-[#2a2421]/40 dark:text-white/30 text-sm tracking-widest uppercase">Analyzing your profile…</p>
                         </motion.div>
                     ) : error ? (
                         <motion.div
@@ -391,12 +395,12 @@ export default function PredictPage() {
                             animate={{ opacity: 1 }}
                             className="text-center max-w-md"
                         >
-                            <p className="text-red-400/80 text-sm tracking-widest uppercase mb-4">Connection Error</p>
-                            <p className="text-white/40 text-sm mb-8">{error}</p>
-                            <p className="text-white/20 text-xs mb-6">Make sure the backend is running at <code className="text-white/40">{BACKEND_URL}</code></p>
+                            <p className="text-red-600/80 dark:text-red-400/80 text-sm tracking-widest uppercase mb-4">Connection Error</p>
+                            <p className="text-[#2a2421]/50 dark:text-white/40 text-sm mb-8">{error}</p>
+                            <p className="text-[#2a2421]/30 dark:text-white/20 text-xs mb-6">Make sure the backend is running at <code className="text-[#2a2421]/50 dark:text-white/40">{BACKEND_URL}</code></p>
                             <button
                                 onClick={() => { setError(null); setLoading(false); }}
-                                className="px-8 py-3 rounded-full border border-white/20 bg-white/5 text-sm tracking-widest uppercase text-white/70 hover:bg-white/10 transition-all"
+                                className="px-8 py-3 rounded-full border border-[#2a2421]/20 dark:border-white/20 bg-[#2a2421]/5 dark:bg-white/5 text-sm tracking-widest uppercase text-[#2a2421]/70 dark:text-white/70 hover:bg-[#2a2421]/10 dark:hover:bg-white/10 transition-all"
                             >
                                 Try Again
                             </button>

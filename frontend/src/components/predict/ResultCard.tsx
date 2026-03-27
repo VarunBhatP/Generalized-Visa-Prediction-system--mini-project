@@ -27,7 +27,7 @@ export default function ResultCard({ score, insights, onRestart }: ResultCardPro
             <div className="relative mb-8">
                 <svg width="180" height="180" viewBox="0 0 180 180">
                     {/* Track */}
-                    <circle cx="90" cy="90" r={radius} fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="8" />
+                    <circle cx="90" cy="90" r={radius} fill="none" className="stroke-[#2a2421]/5 dark:stroke-white/5" strokeWidth="8" />
                     {/* Progress */}
                     <motion.circle
                         cx="90"
@@ -47,7 +47,7 @@ export default function ResultCard({ score, insights, onRestart }: ResultCardPro
                 {/* Score text */}
                 <div className="absolute inset-0 flex flex-col items-center justify-center">
                     <motion.span
-                        className="text-4xl font-medium text-white/95"
+                        className="text-4xl font-medium text-[#2a2421]/95 dark:text-white/95"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ delay: 0.8 }}
@@ -61,7 +61,7 @@ export default function ResultCard({ score, insights, onRestart }: ResultCardPro
             <p className="text-sm tracking-widest uppercase mb-3 font-medium" style={{ color }}>
                 {label}
             </p>
-            <h2 className="text-3xl md:text-4xl font-medium tracking-tight text-white/95 mb-10">
+            <h2 className="text-3xl md:text-4xl font-medium tracking-tight text-[#2a2421]/95 dark:text-white/95 mb-10">
                 Your Prediction Score
             </h2>
 
@@ -73,25 +73,24 @@ export default function ResultCard({ score, insights, onRestart }: ResultCardPro
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: 0.5 + i * 0.1 }}
-                        className="flex items-center gap-3 px-5 py-3 rounded-xl bg-white/[0.03] border border-white/5 text-left"
+                        className="flex items-center gap-3 px-5 py-3 rounded-xl bg-[#2a2421]/[0.03] dark:bg-white/[0.03] border border-[#2a2421]/5 dark:border-white/5 text-left"
                     >
                         <span className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: color }} />
-                        <span className="text-sm text-white/60 font-light">{insight}</span>
+                        <span className="text-sm text-[#2a2421]/60 dark:text-white/60 font-light">{insight}</span>
                     </motion.div>
                 ))}
             </div>
 
-            {/* Actions */}
             <div className="flex gap-4">
                 <button
                     onClick={onRestart}
-                    className="px-8 py-3 rounded-full border border-white/20 bg-white/5 backdrop-blur-md hover:bg-white/10 hover:border-white/40 transition-all text-sm tracking-widest uppercase text-white/90"
+                    className="px-8 py-3 rounded-full border border-[#2a2421]/20 dark:border-white/20 bg-[#2a2421]/5 dark:bg-white/5 backdrop-blur-md hover:bg-[#2a2421]/10 dark:hover:bg-white/10 hover:border-[#2a2421]/40 dark:hover:border-white/40 transition-all text-sm tracking-widest uppercase text-[#2a2421]/90 dark:text-white/90"
                 >
                     Start Over
                 </button>
                 <a
                     href="/"
-                    className="px-8 py-3 rounded-full border border-white/10 text-white/30 hover:text-white/60 hover:border-white/20 transition-all text-sm tracking-widest uppercase"
+                    className="px-8 py-3 rounded-full border border-[#2a2421]/10 dark:border-white/10 text-[#2a2421]/40 dark:text-white/30 hover:text-[#2a2421]/70 dark:hover:text-white/60 hover:border-[#2a2421]/20 dark:hover:border-white/20 transition-all text-sm tracking-widest uppercase"
                 >
                     ← Home
                 </a>

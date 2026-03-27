@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 
-const cardBase = "border border-white/[0.08] bg-[#0d0d0d] flex flex-col overflow-hidden p-7 group hover:bg-[#111111] transition-colors duration-300";
+const cardBase = "border border-black/[0.08] dark:border-white/[0.08] bg-[#ffffff] dark:bg-[#0d0d0d] flex flex-col overflow-hidden p-7 group hover:bg-[#f3f2ef] dark:hover:bg-[#111111] transition-colors duration-300";
 
 // ── Wireframe SVG illustrations ───────────────────────────────────────────────
 
@@ -131,20 +131,20 @@ const cards = [
 
 export default function RankingFactors() {
     return (
-        <section className="w-full bg-[#0a0a0a] py-24 px-6 md:px-12 lg:px-20 font-sans">
+        <section className="w-full bg-[#fdfbf7] dark:bg-[#0a0a0a] py-24 px-6 md:px-12 lg:px-20 font-sans">
             {/* Header */}
             <div className="mb-10">
-                <p className="text-xs tracking-widest uppercase text-white/25 mb-3 font-light">
+                <p className="text-xs tracking-widest uppercase text-black/40 dark:text-white/25 mb-3 font-light">
                     Factors
                 </p>
-                <h2 className="text-4xl md:text-5xl font-medium tracking-tight text-white/90">
+                <h2 className="text-4xl md:text-5xl font-medium tracking-tight text-black/90 dark:text-white/90">
                     Key ranking factors.
                 </h2>
             </div>
 
             {/* Bento grid with explicit placement */}
             <div
-                className="grid gap-[1px] bg-white/[0.06]"
+                className="grid gap-[1px] bg-black/[0.06] dark:bg-white/[0.06]"
                 style={{ gridTemplateColumns: "1fr 1fr 1fr", gridTemplateRows: "auto auto" }}
             >
                 {cards.map((card, i) => (
@@ -158,27 +158,27 @@ export default function RankingFactors() {
                         style={{ gridArea: card.gridArea }}
                     >
                         {/* Title */}
-                        <p className="text-[11px] tracking-widest uppercase text-white/35 mb-3 font-mono">
+                        <p className="text-[11px] tracking-widest uppercase text-black/40 dark:text-white/35 mb-3 font-mono">
                             {card.title}
                         </p>
 
                         {/* Description */}
-                        <p className="text-sm text-white/55 font-light leading-relaxed mb-5">
+                        <p className="text-sm text-black/60 dark:text-white/55 font-light leading-relaxed mb-5">
                             {card.description}
                         </p>
 
                         {/* Bullets */}
                         <ul className="space-y-2 mb-6">
                             {card.bullets.map((b) => (
-                                <li key={b} className="flex items-start gap-2.5 text-[11px] text-white/30 font-light font-mono">
-                                    <span className="mt-1.5 w-1 h-1 rounded-full bg-white/15 flex-shrink-0" />
+                                <li key={b} className="flex items-start gap-2.5 text-[11px] text-black/50 dark:text-white/30 font-light font-mono">
+                                    <span className="mt-1.5 w-1 h-1 rounded-full bg-black/20 dark:bg-white/15 flex-shrink-0" />
                                     {b}
                                 </li>
                             ))}
                         </ul>
 
                         {/* SVG illustration */}
-                        <div className="flex-1 flex items-end overflow-hidden">
+                        <div className="flex-1 flex items-end overflow-hidden saturate-0 dark:saturate-100 invert dark:invert-0">
                             {card.svg}
                         </div>
                     </motion.div>

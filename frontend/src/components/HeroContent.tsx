@@ -17,7 +17,7 @@ export default function HeroContent() {
                         Global Journey
                     </span>
                 </h1>
-                <p className="text-lg md:text-xl text-slate-400 max-w-lg leading-relaxed">
+                <p className="text-lg md:text-2xl text-slate-700 max-w-lg leading-relaxed">
                     Leverage advanced data insights to predict your visa approval chances with high accuracy.
                     Navigate international borders with confidence.
                 </p>

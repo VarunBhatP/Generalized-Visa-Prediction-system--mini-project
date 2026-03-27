@@ -12,15 +12,15 @@ const WebGPUEarth = dynamic(() => import("@/components/WebGPUEarth"), {
 
 export default function Home() {
   return (
-    <main className="relative h-screen w-full bg-[#0a0a0a] text-[#f4f4f5] font-sans selection:bg-white/20 overflow-y-auto overflow-x-hidden">
+    <main className="relative h-screen w-full bg-[#fdfbf7] dark:bg-[#0a0a0a] text-[#1a1a1a] dark:text-[#f4f4f5] font-sans selection:bg-black/20 dark:selection:bg-white/20 overflow-y-auto overflow-x-hidden">
       {/* 3D Background Globe */}
       <div className="absolute top-0 right-[-30%] w-[100%] h-screen flex items-center justify-end z-0 pointer-events-auto transform scale-[1.5] translate-y-[15%]">
         <WebGPUEarth width="100%" height="100%" />
       </div>
 
       {/* Cinematic Overlays to mimic the lighting in the image */}
-      <div className="absolute inset-0 bg-gradient-to-r from-[#0a0a0a] via-[#0a0a0a]/60 to-transparent z-10 pointer-events-none" />
-      <div className="absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-r from-[#fdfbf7] via-[#fdfbf7]/60 dark:from-[#0a0a0a] dark:via-[#0a0a0a]/60 to-transparent z-10 pointer-events-none" />
+      <div className="absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-[#fdfbf7] dark:from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
 
       {/* UI Content Layer */}
       <div className="relative z-20 flex flex-col h-screen w-full px-6 py-8 md:px-12 lg:px-20 pointer-events-none">
@@ -36,10 +36,10 @@ export default function Home() {
             transition={{ duration: 1.2, ease: "easeOut", delay: 0.2 }}
             className="max-w-4xl"
           >
-            <p className="text-sm md:text-base tracking-wide text-white/50 mb-6 font-light pointer-events-auto cursor-default">
+            <p className="text-base md:text-lg tracking-wide text-black/50 dark:text-white/50 mb-6 font-light pointer-events-auto cursor-default">
               Advanced predictive modeling for global mobility.
             </p>
-            <h1 className="text-[3.5rem] leading-[1.1] md:text-7xl lg:text-[7.5rem] lg:leading-[1.05] font-medium tracking-tight text-white/95 pointer-events-auto cursor-default">
+            <h1 className="text-[3.5rem] leading-[1.1] md:text-7xl lg:text-[7.5rem] lg:leading-[1.05] font-medium tracking-tight text-black/95 dark:text-white/95 pointer-events-auto cursor-default">
               Know<br /> your odds.<br />
               Before you apply.
             </h1>
@@ -54,8 +54,8 @@ export default function Home() {
           className="flex flex-col md:flex-row justify-between items-start md:items-end w-full pb-2 md:pb-6"
         >
           {/* Paragraph */}
-          <div className="max-w-sm pointer-events-auto border-l border-white/10 pl-6 mb-8 md:mb-0">
-            <p className="text-sm md:text-base text-[#82828b] leading-relaxed font-light">
+          <div className="max-w-sm pointer-events-auto border-l border-black/10 dark:border-white/10 pl-6 mb-8 md:mb-0">
+            <p className="text-base md:text-lg text-[#52525b] dark:text-[#82828b] leading-relaxed font-light">
               We replace uncertainty with data. By analyzing global travel patterns,
               financial requirements, and historical approval rates, we
               illuminate your path across borders.
@@ -66,7 +66,7 @@ export default function Home() {
       </div>
 
       {/* Sections Below Hero */}
-      <div className="relative z-30 bg-[#0a0a0a] w-full">
+      <div className="relative z-30 bg-[#fdfbf7] dark:bg-[#0a0a0a] w-full">
         <div id="how-it-works"><HowItWorks /></div>
         <div id="ranking-factors"><RankingFactors /></div>
       </div>

@@ -10,7 +10,7 @@ export default function Navbar() {
                 <div className="flex items-center justify-between h-16">
                     <Link href="/" className="flex items-center gap-2">
                         <Globe className="w-8 h-8 text-primary" />
-                        <span className="font-bold text-xl tracking-tight text-white">GlobalVisa</span>
+                        <span className="font-bold text-3xl tracking-tight text-white">GlobalVisa</span>
                     </Link>
                     <div className="flex space-x-6">
                         <Link href="/" className="text-sm font-medium text-slate-300 hover:text-white transition-colors">Home</Link>
