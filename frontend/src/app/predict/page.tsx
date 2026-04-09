@@ -41,7 +41,7 @@ export default function PredictPage() {
     });
     const [showResult, setShowResult] = useState(false);
     const [loading, setLoading] = useState(false);
-    const [result, setResult] = useState<{ approval_status: boolean; approval_probability: number } | null>(null);
+    const [result, setResult] = useState<any>(null);
     const [error, setError] = useState<string | null>(null);
 
     const TOTAL = 13;
@@ -130,24 +130,7 @@ export default function PredictPage() {
         });
     };
 
-    const score = result ? Math.round(result.approval_probability * 100) : 0;
 
-    const insights = result
-        ? [
-            result.approval_status
-                ? "Your profile meets the approval threshold."
-                : "Your profile falls below the approval threshold.",
-            parseInt(answers.prev_visa_rejections) > 0
-                ? `${answers.prev_visa_rejections} prior rejection(s) detected — attach supporting documentation.`
-                : "No prior rejections detected — strong credibility signal.",
-            parseInt(answers.prev_countries_visited) > 3
-                ? "Strong travel history boosts your approval probability."
-                : "Limited travel history — consider providing extra financial proof.",
-            answers.has_return_ticket === "Yes"
-                ? "Return ticket confirmed — reduces overstay risk assessment."
-                : "No return ticket on file — consider securing one before applying.",
-        ]
-        : [];
 
 
 
@@ -407,7 +390,7 @@ export default function PredictPage() {
                         </motion.div>
                     ) : showResult && result ? (
                         <motion.div key="result" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-                            <ResultCard score={score} insights={insights} onRestart={handleRestart} />
+                            <ResultCard result={result} onRestart={handleRestart} />
                         </motion.div>
                     ) : (
                         <motion.div key={`step-${step}`} className="w-full max-w-2xl">
