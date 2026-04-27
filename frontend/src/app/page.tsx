@@ -36,7 +36,7 @@ export default function Home() {
             transition={{ duration: 1.2, ease: "easeOut", delay: 0.2 }}
             className="max-w-4xl"
           >
-            <p className="text-base md:text-lg tracking-wide text-black/50 dark:text-white/50 mb-6 font-light pointer-events-auto cursor-default">
+            <p className="text-base md:text-lg tracking-wide text-black/90 dark:text-white mb-6 font-light pointer-events-auto cursor-default">
               Advanced predictive modeling for global mobility.
             </p>
             <h1 className="text-[3.5rem] leading-[1.1] md:text-7xl lg:text-[7.5rem] lg:leading-[1.05] font-medium tracking-tight text-black/95 dark:text-white/95 pointer-events-auto cursor-default">
@@ -55,7 +55,7 @@ export default function Home() {
         >
           {/* Paragraph */}
           <div className="max-w-sm pointer-events-auto border-l border-black/10 dark:border-white/10 pl-6 mb-8 md:mb-0">
-            <p className="text-base md:text-lg text-[#52525b] dark:text-[#82828b] leading-relaxed font-light">
+            <p className="text-base md:text-lg text-[#131313] dark:text-[#ffffff] leading-relaxed font-light">
               We replace uncertainty with data. By analyzing global travel patterns,
               financial requirements, and historical approval rates, we
               illuminate your path across borders.

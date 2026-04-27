@@ -13,7 +13,7 @@ export default function SiteHeader() {
     <nav className="flex flex-wrap items-center justify-between w-full pointer-events-auto relative z-50">
       {/* Top row: Logo + Mobile controls */}
       <div className="flex items-center justify-between w-full lg:w-auto">
-        <Link href="/" className="text-xl md:text-2xl font-light tracking-tight hover:text-black/80 dark:hover:text-white/80 transition-colors text-black dark:text-white">
+        <Link href="/" className="text-xl md:text-4xl font-light tracking-tight hover:text-black/80 dark:hover:text-white/80 transition-colors text-black dark:text-white">
           GlobalVisa<sup className="text-[10px] ml-0.5">®</sup>
         </Link>
         

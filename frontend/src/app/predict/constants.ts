@@ -30,3 +30,23 @@ export const cardActiveClass =
     "px-5 py-3.5 rounded-xl border cursor-pointer transition-all duration-300 text-sm tracking-wide bg-[#2a2421]/[0.08] dark:bg-white/[0.08] border-[#2a2421]/40 dark:border-white/40 text-[#2a2421]/95 dark:text-white/95";
 
 export const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8000";
+
+// Mirrors backend Pydantic constraints for real-time frontend validation
+export const fieldValidation: Partial<Record<keyof Answers, { min?: number; max?: number; message: (v: number) => string }>> = {
+    age: {
+        min: 0, max: 120,
+        message: (v) => v < 0 ? "Age must be at least 0" : "Age must be 120 or below",
+    },
+    monthly_income_usd: {
+        min: 0,
+        message: () => "Income cannot be negative",
+    },
+    bank_balance_usd: {
+        min: 0,
+        message: () => "Bank balance cannot be negative",
+    },
+    duration_of_stay: {
+        min: 1, max: 365,
+        message: (v) => v < 1 ? "Stay must be at least 1 day" : "Stay cannot exceed 365 days",
+    },
+};

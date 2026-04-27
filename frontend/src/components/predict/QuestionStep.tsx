@@ -13,6 +13,7 @@ interface QuestionStepProps {
     isFirst: boolean;
     isLast: boolean;
     canProceed: boolean;
+    inputError?: string | null;
 }
 
 const variants = {
@@ -31,6 +32,7 @@ export default function QuestionStep({
     isFirst,
     isLast,
     canProceed,
+    inputError,
 }: QuestionStepProps) {
     return (
         <AnimatePresence mode="wait">
@@ -54,7 +56,23 @@ export default function QuestionStep({
                 </h2>
 
                 {/* Input slot */}
-                <div className="mb-12">{children}</div>
+                <div className="mb-3">{children}</div>
+
+                {/* Inline validation error */}
+                <div className="mb-9 h-5">
+                    {inputError && (
+                        <motion.p
+                            key={inputError}
+                            initial={{ opacity: 0, y: -4 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 0.2 }}
+                            className="text-red-500/80 dark:text-red-400/70 text-xs tracking-wide flex items-center gap-1.5"
+                        >
+                            <span>⚠</span> {inputError}
+                        </motion.p>
+                    )}
+                </div>
 
                 {/* Navigation — Back left, Next right */}
                 <div className="flex items-center justify-between w-full">

@@ -19,7 +19,8 @@ import {
     inputClass,
     cardClass,
     cardActiveClass,
-    BACKEND_URL
+    BACKEND_URL,
+    fieldValidation,
 } from "@/app/predict/constants";
 
 export default function PredictPage() {
@@ -42,17 +43,34 @@ export default function PredictPage() {
     const [showResult, setShowResult] = useState(false);
     const [loading, setLoading] = useState(false);
     const [result, setResult] = useState<any>(null);
-    const [error, setError] = useState<string | null>(null);
+    const [error, setError] = useState<{ title: string; message: string } | null>(null);
+    const [inputErrors, setInputErrors] = useState<Partial<Record<keyof Answers, string | null>>>({});
 
     const TOTAL = 13;
 
-    const update = (key: keyof Answers, val: string) =>
+    const validate = (key: keyof Answers, val: string): string | null => {
+        const rule = fieldValidation[key];
+        if (!rule || val === "") return null;
+        const n = parseFloat(val);
+        if (isNaN(n)) return null;
+        if (rule.min !== undefined && n < rule.min) return rule.message(n);
+        if (rule.max !== undefined && n > rule.max) return rule.message(n);
+        return null;
+    };
+
+    const update = (key: keyof Answers, val: string) => {
         setAnswers((prev) => ({ ...prev, [key]: val }));
+        setInputErrors((prev) => ({ ...prev, [key]: validate(key, val) }));
+    };
+
+    // Current step's field key (order matches Answers interface)
+    const currentKey = Object.keys(answers)[step] as keyof Answers;
+    const currentInputError = inputErrors[currentKey] ?? null;
 
     // Check if current step has a value
     const canProceed = (() => {
         const val = Object.values(answers)[step];
-        return val?.trim().length > 0;
+        return val?.trim().length > 0 && !currentInputError;
     })();
 
     const handleNext = async () => {
@@ -92,6 +110,14 @@ export default function PredictPage() {
 
                 if (!res.ok) {
                     const err = await res.json();
+                    // FastAPI validation errors return detail as an array of objects
+                    if (Array.isArray(err?.detail)) {
+                        const messages = err.detail.map((d: { loc?: string[]; msg: string }) => {
+                            const field = d.loc ? d.loc.filter((l) => l !== "body").join(".") : "";
+                            return field ? `${field}: ${d.msg}` : d.msg;
+                        });
+                        throw new Error(messages.join("\n"));
+                    }
                     throw new Error(err?.detail || `Server error: ${res.status}`);
                 }
 
@@ -99,7 +125,13 @@ export default function PredictPage() {
                 setResult(data);
                 setShowResult(true);
             } catch (err: unknown) {
-                setError(err instanceof Error ? err.message : "Something went wrong. Please try again.");
+                const msg = err instanceof Error ? err.message : "Something went wrong. Please try again.";
+                // Determine if this looks like a validation error (field: msg lines) vs a connection error
+                const isValidation = msg.includes(":") && !msg.startsWith("Failed to fetch");
+                setError({
+                    title: isValidation ? "Invalid Input" : "Connection Error",
+                    message: msg,
+                });
             } finally {
                 setLoading(false);
             }
@@ -378,9 +410,11 @@ export default function PredictPage() {
                             animate={{ opacity: 1 }}
                             className="text-center max-w-md"
                         >
-                            <p className="text-red-600/80 dark:text-red-400/80 text-sm tracking-widest uppercase mb-4">Connection Error</p>
-                            <p className="text-[#2a2421]/50 dark:text-white/40 text-sm mb-8">{error}</p>
-                            <p className="text-[#2a2421]/30 dark:text-white/20 text-xs mb-6">Make sure the backend is running at <code className="text-[#2a2421]/50 dark:text-white/40">{BACKEND_URL}</code></p>
+                            <p className="text-red-600/80 dark:text-red-400/80 text-sm tracking-widest uppercase mb-4">{error.title}</p>
+                            <p className="text-[#2a2421]/50 dark:text-white/40 text-sm mb-8 whitespace-pre-line">{error.message}</p>
+                            {error.title === "Connection Error" && (
+                                <p className="text-[#2a2421]/30 dark:text-white/20 text-xs mb-6">Make sure the backend is running at <code className="text-[#2a2421]/50 dark:text-white/40">{BACKEND_URL}</code></p>
+                            )}
                             <button
                                 onClick={() => { setError(null); setLoading(false); }}
                                 className="px-8 py-3 rounded-full border border-[#2a2421]/20 dark:border-white/20 bg-[#2a2421]/5 dark:bg-white/5 text-sm tracking-widest uppercase text-[#2a2421]/70 dark:text-white/70 hover:bg-[#2a2421]/10 dark:hover:bg-white/10 transition-all"
@@ -403,6 +437,7 @@ export default function PredictPage() {
                                 isFirst={step === 0}
                                 isLast={step === TOTAL - 1}
                                 canProceed={isStepperStep || canProceed}
+                                inputError={currentInputError}
                             >
                                 {steps[step].input}
                             </QuestionStep>

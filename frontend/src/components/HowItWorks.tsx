@@ -22,7 +22,7 @@ const steps: Step[] = [
             </>
         ),
         stats: [
-            { label: "Input Sources", value: "10+ Data Points" },
+            { label: "Input Sources", value: "14+ Data Points" },
             { label: "Processing", value: "Real-time" },
             { label: "Accuracy", value: "95.2% Verified" },
         ],
@@ -50,7 +50,7 @@ const steps: Step[] = [
         stats: [
             { label: "Model Type", value: "Random Forest" },
             { label: "Training Data", value: "10K+ Records" },
-            { label: "Score Range", value: "70-90% Confidence" },
+            { label: "Accuracy", value: "88.84%" },
         ],
         svg: (
             <svg viewBox="0 0 120 120" className="w-28 h-28" fill="none" stroke="white" strokeWidth="1" opacity="0.25">
