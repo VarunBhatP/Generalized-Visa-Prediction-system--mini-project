@@ -167,6 +167,7 @@ def build_sentence(feature_key, feature_name, shap_value):
             return f"{feature_name} slightly reduced the approval probability."
 
 
+#complete ml inference pipeline
 def predict_visa(data: dict):
 
     df = convert_to_model_format(data)
@@ -176,7 +177,11 @@ def predict_visa(data: dict):
 
     shap_values = explainer(df)
     shap_vals = shap_values.values[0, :, 1]
+    
+    base_value = shap_values.base_values[0][1]
 
+    print(base_value)
+    
     feature_contributions = {}
 
     for feature, value in zip(df.columns, shap_vals):
